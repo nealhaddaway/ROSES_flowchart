@@ -6,7 +6,7 @@ ROSES_flowchart <- function (data,
                              type,
                              combined = TRUE,
                              font = 'Helvetica',
-                             input_colour = 'HoneyDew2',
+                             input_colour = 'Gainsboro',
                              output_colour = 'LightSteelBlue1',
                              main_colour = 'Black',
                              arrow_colour = 'Black',
@@ -88,19 +88,19 @@ ROSES_flowchart <- function (data,
                                     '\n(n = ',
                                     dbresults,
                                     ')'
-                                    ), "', width = 4, height = 0.5, pos='4,",ystart+14.5,"!', tooltip = '", tooltips[4], "', penwidth = 4]
+                                    ), "', width = 4, height = 0.5, pos='4,",ystart+14.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
       otherresults [label = '", paste0(text_wrap(otherresults_text, 40),
                                     '\n(n = ',
                                     otherresults,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='9,",ystart+14.5,"!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 4, height = 0.5, pos='9,",ystart+14.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
-      prescreened [label = '", paste0(text_wrap(prescreened_text, 20),
+      prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
                                       '\n(n = ',
                                       prescreened,
                                       ')'
-      ), "', width = 2.5, height = 0.5, pos='2,7!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 2.5, height = 0.5, pos='2,7!', tooltip = '", tooltips[4], "', style='filled']
     
       node [shape = box,
             fontname = ", font, ",
@@ -181,17 +181,29 @@ ROSES_flowchart <- function (data,
                                     '\n(n = ',
                                     finalincl,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style='filled']
       
       node [shape = square, width = 0, color=White]
       A0 [label = '', width = 0, height = 0, pos='9,", ystart+13.75, "!', tooltip='']
       A1 [label = '', width = 0, height = 0, pos='4,", ystart+13.75, "!', tooltip='']
       A2 [label = '', width = 0, height = 0, pos='4,7!', tooltip='']
+      C1 [label = '', width = 0, height = 0, pos='0.5,5.5!', tooltip='']
+      C2 [label = '', width = 0, height = 0, pos='1.9,5.5!', tooltip='']
+      D1 [label = '', width = 0, height = 0, pos='6.1,5.5!', tooltip='']
+      D2 [label = '', width = 0, height = 0, pos='11.5,5.5!', tooltip='']
+      
+      edge [color = 'Goldenrod1', 
+            style = filled,
+            arrowhead = 'none',
+            penwidth = 4,
+            alpha = 0.2]
+      C1->C2; D1->D2
       
       edge [color = ", arrow_colour, ", 
             arrowhead = ", arrow_head, ", 
             arrowtail = ", arrow_tail, ", 
-            style = filled]
+            style = filled,
+            penwidth = 0.7]
       deduped->dupesremoved;
       ", tanda_edges, "
       ftretr->ftnotretr;
@@ -331,19 +343,19 @@ theDiv.innerHTML += "<text text-anchor=\'middle\' style=\'transform: rotate(-90d
                                     '\n(n = ',
                                     dbresults,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='4,",ystart+11.5,"!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 4, height = 0.5, pos='4,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
       otherresults [label = '", paste0(text_wrap(otherresults_text, 40),
                                        '\n(n = ',
                                        otherresults,
                                        ')'
-      ), "', width = 4, height = 0.5, pos='9,",ystart+11.5,"!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 4, height = 0.5, pos='9,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
-      prescreened [label = '", paste0(text_wrap(prescreened_text, 20),
+      prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
                                       '\n(n = ',
                                       prescreened,
                                       ')'
-      ), "', width = 2.5, height = 0.5, pos='2,4!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 2.5, height = 0.5, pos='2,4!', tooltip = '", tooltips[4], "', style='filled']
     
       node [shape = box,
             fontname = ", font, ",
@@ -400,17 +412,30 @@ theDiv.innerHTML += "<text text-anchor=\'middle\' style=\'transform: rotate(-90d
                                     '\n(n = ',
                                     finalmapincl,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', penwidth = 4]
+      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style='filled']
       
       node [shape = square, width = 0, color=White]
       A0 [label = '', width = 0, height = 0, pos='9,", ystart+10.75, "!', tooltip='']
       A1 [label = '', width = 0, height = 0, pos='4,", ystart+10.75, "!', tooltip='']
       A2 [label = '', width = 0, height = 0, pos='4,4!', tooltip='']
+      C1 [label = '', width = 0, height = 0, pos='0.5,2.5!', tooltip='']
+      C2 [label = '', width = 0, height = 0, pos='1.9,2.5!', tooltip='']
+      D1 [label = '', width = 0, height = 0, pos='6.1,2.5!', tooltip='']
+      D2 [label = '', width = 0, height = 0, pos='11.5,2.5!', tooltip='']
+      
+            
+      edge [color = 'Goldenrod1', 
+            style = filled,
+            arrowhead = 'none',
+            penwidth = 4,
+            alpha = 0.2]
+      C1->C2; D1->D2
       
       edge [color = ", arrow_colour, ", 
             arrowhead = ", arrow_head, ", 
             arrowtail = ", arrow_tail, ", 
-            style = filled]
+            style = filled,
+            penwidth = 0.7]
       deduped->dupesremoved;
       ", tanda_edges, "
       ftretr->ftnotretr;

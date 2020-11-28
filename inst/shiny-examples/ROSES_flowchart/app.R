@@ -29,31 +29,29 @@ ui <- shinyUI(navbarPage("ROSES Flow Chart",
     tabPanel("Home",
          fluidRow(
             column(10, offset = 1,
+                   tags$a(href="https://www.roses-reporting.com/", tags$img(height = "80px", src = "https://github.com/nealhaddaway/ROSES_flowchart/blob/master/inst/extdata/roses.png?raw=true")),br(),
+                   br(),
                    'Systematic reviews should be described in a high degree of methodological detail. ', tags$a(href="http://www.roses-reporting.com/", "The ROSES reporting standards"), 
                    'call for a high level of reporting detail in systematic reviews and systematic maps. An integral part of the methodological description of a review 
                    is a flow diagram/chart.',
                    br(),
                    br(),
                    'This tool allows you to produce a flow chart for your own review that conforms to ', tags$a(href="http://www.roses-reporting.com/", "ROSES reporting standards."), 
-                   'You can provide the numbers for the boxes in the input fields below. Select whether your synthesis is a \'review\' or a \'map\' and whether title and abstract 
-                   screening were performed together (\'combined\') or \'separately\'.',
+                   'You can provide the numbers for the boxes in the input fields in the \'Create flow chart\' tab. Select whether your synthesis is a \'review\' or a \'map\' and whether title and abstract 
+                   screening were \'combined\' or performed \'separately\'.',
                    br(),
                    br(),
-                   "At present, this version of the tool doesn't support embedding tooltips and hyperlinks in the plot. For this functionality, please use the", 
-                   tags$a(href="https://github.com/nealhaddaway/ROSES_flowchart", "ROSES flow chart R package on Github."),
+                   'Please let us know if you have any feedback or if you encounter an error by sending an email to ', tags$a(href="mailto:neal.haddaway@sei.org", "neal.haddaway@sei.org."),
                    br(),
                    br(),
-                   'Please let us know if you have any feedback or if you encounter an error by sending an email to ', tags$a(href="mailto:neal.haddaway@sei.org", "neal.haddaway@sei.org"),
+                   '***TO BEGIN***',
                    br(),
-                   br(),
-                   'TO BEGIN',
-                   br(),
-                   'Navigate to the \'Create flow chart\' tab and enter your data'),
+                   'Navigate to the \'Create flow chart\' tab and enter your data.'),
     ),
 
         # Show a plot of the generated distribution
         fluidRow(
-            column(10, 
+            column(10, offset = 1,
             br(),
             hr(),
             'Credits:',
@@ -61,7 +59,10 @@ ui <- shinyUI(navbarPage("ROSES Flow Chart",
             'Neal R Haddaway (creator)', br(),
             br(),
             tags$a(href="https://github.com/nealhaddaway/ROSES_flowchart", tags$img(height = 40, width = 40, src = "https://pngimg.com/uploads/github/github_PNG40.png")), 
-            'Created November 2020'
+            'Created November 2020', br(),
+            br(),
+            'Cite as:', br(),
+            'Haddaway, N. R. (2020) ROSES_flowchart(): An R package and ShinyApp. doi: 10.5281/zenodo.4294810.'
             )
         )
     ),
@@ -75,6 +76,7 @@ ui <- shinyUI(navbarPage("ROSES Flow Chart",
                            selectInput("combined", "Title and abstract screening:", choices=c('combined', 'separately')),
                            hr()),
                     column(7,
+                           tags$a(href="https://www.roses-reporting.com/", tags$img(height = "80px", src = "https://github.com/nealhaddaway/ROSES_flowchart/blob/master/inst/extdata/roses.png?raw=true")),
                            hr())
              ),
              sidebarLayout(  
