@@ -1,26 +1,3 @@
-dbresults_text <- 'Records identified from bibliographic database searches'
-otherresults_text <- 'Records identified from searching other sources'
-deduped_text <- 'Records after duplicates removed'
-dupesremoved_text <- 'Duplicates removed'
-tandaincl_text <- 'Records after title and abstract screening'
-tandaexcl_text <- 'Excluded titles and abstracts'
-titleincl_text <- 'Records after title screening'
-titleexcl_text <- 'Excluded titles'
-abstractincl_text <- 'Records after abstract screening'
-abstractexcl_text <- 'Excluded abstracts'
-ftretr_text <- 'Articles retrieved at full text'
-ftnotretr_text <- 'Unretrievable full texts'
-ftincl_text <- 'Articles after full text screening'
-ftexcl_text <- 'Excluded full texts'
-prescreened_text <- 'Pre-screened articles from other sources'
-studart_text <- 'Articles / Studies included in the review'
-caincl_text <- 'Studies included after critical appraisal'
-caexcl_text <- 'Excluded from further synthesis:'
-narrincl_text <- 'Studies included in narrative synthesis'
-finalincl_text <- 'Studies included in quantitative/ qualitative/ other synthesis'
-finalexcl_text <- 'Studies not included in further synthesis'
-finalmapincl_text <- 'Studies included in the systematic map database and narrative synthesis'
-
 dbresults <- 'xxx'
 otherresults <- 'xxx'
 deduped <- 'xxx'
@@ -38,20 +15,13 @@ ftexcl <- data.frame(reason = c('Population', 'Intervention', 'Comparator', 'Out
 prescreened <- 'xxx'
 studart <- c('xxx', 'xxx')
 caincl <- 'xxx'
-caexcl <- 'xxx'
+caexcl <- data.frame(reason = c('Reason1', 'Reason2', 'Reason3', 'Reason4', 'Reason5'), n = c('xxx', 'xxx', 'xxx', 'xxx', 'xxx'))
 narrincl <- 'xxx'
 finalincl <- 'xxx'
-finalexcl <- 'xxx'
+finalexcl <- data.frame(reason = c('Reason1', 'Reason2', 'Reason3', 'Reason4', 'Reason5'), n = c('xxx', 'xxx', 'xxx', 'xxx', 'xxx'))
 finalmapincl <- 'xxx'
 
 tooltips <- ''
-
-data <- list('dbresults_text', 'otherresults_text', 'deduped_text', 'dupesremoved_text', 'tandaincl_text', 
-             'tandaexcl_text', 'titleincl_text', 'titleexcl_text', 'abstractincl_text', 'abstractexcl_text', 
-             'ftretr_text', 'ftnotretr_text', 'ftincl_text', 'ftexcl_text', 'prescreened_text', 'studart_text', 
-             'caincl_text', 'caexcl_text', 'narrincl_text', 'finalincl_text', 'finalexcl_text', 'dbresults', 
-             'otherresults', 'deduped', 'dupesremoved', 'ftretr', 'ftnotretr', 'ftincl', 'ftexcl', 'prescreened', 
-             'studart', 'caincl', 'caexcl', 'narrincl', 'finalincl', 'finalexcl', 'tooltips')
 
 ROSES_flowchart <- function (dbresults,
                              otherresults,
@@ -78,6 +48,8 @@ ROSES_flowchart <- function (dbresults,
                              interactive = FALSE,
                              type,
                              combined = TRUE,
+                             include_prescreened = TRUE,
+                             synthesis_type = '',
                              font = 'Helvetica',
                              input_colour = 'Gainsboro',
                              output_colour = 'LightSteelBlue1',
@@ -86,8 +58,62 @@ ROSES_flowchart <- function (dbresults,
                              arrow_head = 'normal',
                              arrow_tail = 'none') {
   
+  #--------------------------------------------------------------------------
+  dbresults_text <- 'Records identified from bibliographic database searches'
+  otherresults_text <- 'Records identified from searching other sources'
+  deduped_text <- 'Records after duplicates removed'
+  dupesremoved_text <- 'Duplicates removed'
+  tandaincl_text <- 'Records after title and abstract screening'
+  tandaexcl_text <- 'Excluded titles and abstracts'
+  titleincl_text <- 'Records after title screening'
+  titleexcl_text <- 'Excluded titles'
+  abstractincl_text <- 'Records after abstract screening'
+  abstractexcl_text <- 'Excluded abstracts'
+  ftretr_text <- 'Articles retrieved at full text'
+  ftnotretr_text <- 'Unretrievable full texts'
+  ftincl_text <- 'Articles after full text screening'
+  ftexcl_text <- 'Excluded full texts'
+  prescreened_text <- 'Pre-screened articles from other sources'
+  studart_text <- 'Articles / Studies included in the review'
+  caincl_text <- 'Studies included after critical appraisal'
+  caexcl_text <- 'Excluded from further synthesis'
+  narrincl_text <- 'Studies included in narrative synthesis'
+  finalincl_text <- paste('Studies included in', synthesis_type, 'synthesis', sep = ' ')
+  finalexcl_text <- 'Studies not included in further synthesis'
+  finalmapincl_text <- 'Studies included in the systematic map database and narrative synthesis'
+  
+  #--------------------------------------------------------------------------
+  allnoretr <- sum(as.numeric(ftnotretr[1,2]), as.numeric(ftnotretr[2,2]))
+  if(is.na(allnoretr) == TRUE){
+    allnoretr = ''
+  }
+  allftexcl <- sum(as.numeric(ftexcl[,2]))
+  if(is.na(allftexcl) == TRUE){
+    allftexcl = ''
+  }
+  allcaexcl <- sum(as.numeric(caexcl[,2]))
+  if(is.na(allcaexcl) == TRUE){
+    allcaexcl = ''
+  }
+  allfinalexcl <- sum(as.numeric(finalexcl[,2]))
+  if(is.na(allfinalexcl) == TRUE){
+    allfinalexcl = ''
+  }
+  
   if (type == 'review'){
     #------------------------------------------------------------------------
+    if(include_prescreened == TRUE){
+      prescreenednode <- paste0("prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
+                                                                 '\n(n = ',
+                                                                 prescreened,
+                                                                 ')'
+      ), "', width = 2.5, height = 0.5, pos='2,7!', tooltip = '", tooltips[4], "', style='filled']")
+      prescreenededge <- 'prescreened->A2;'
+    } else {
+      prescreenednode <- ''
+      prescreenededge <- ''
+    }
+    
     if(nrow(ftexcl) > 5){
       ftexclh <- 8.5 - ((nrow(ftexcl)-5)/4)
     } else {
@@ -97,9 +123,9 @@ ROSES_flowchart <- function (dbresults,
     if (combined == TRUE){
       ystart <- 0
       titleabstract <- paste0('tandaincl [label = \'', paste0(text_wrap(tandaincl_text, 40),
-                                 '\n(n = ',
-                                 tandaincl,
-                                 ')'
+                                                              '\n(n = ',
+                                                              tandaincl,
+                                                              ')'
       ), "', width = 4, height = 0.5, pos='",4,",",11.5,"!', tooltip = ", tooltips[4], "]
       
       tandaexcl [label = '", paste0(text_wrap(tandaexcl_text, 40),
@@ -126,15 +152,15 @@ ROSES_flowchart <- function (dbresults,
       ), "', width = 4, height = 0.5, pos='", 9, ",", 13, "!', tooltip = '", tooltips[4], "']
       
       abstractincl [label = \'", paste0(text_wrap(abstractincl_text, 40),
-                                                              '\n(n = ',
-                                                              abstractincl,
-                                                              ')'
+                                        '\n(n = ',
+                                        abstractincl,
+                                        ')'
       ), "', width = 4, height = 0.5, pos='",4,",",11.5,"!', tooltip = ", tooltips[4], "]
       
       abstractexcl [label = '", paste0(text_wrap(abstractexcl_text, 40),
-                                    '\n(n = ',
-                                    abstractexcl,
-                                    ')'
+                                       '\n(n = ',
+                                       abstractexcl,
+                                       ')'
       ), "', width = 4, height = 0.5, pos='", 9, ",", 11.5, "!', tooltip = '", tooltips[4], "']
       ")
       tanda_edges <- 'deduped->titleincl;\ntitleincl->titleexcl;\ntitleincl->abstractincl;\nabstractincl->abstractexcl;\nabstractincl->ftretr;\n'
@@ -142,7 +168,7 @@ ROSES_flowchart <- function (dbresults,
       screenboxy <- 10.65
       searchboxy <- 16
     }
-
+    
     #------------------------------------------------------------------------
     x <- DiagrammeR::grViz(
       paste0("digraph TD {
@@ -156,19 +182,15 @@ ROSES_flowchart <- function (dbresults,
                                     '\n(n = ',
                                     dbresults,
                                     ')'
-                                    ), "', width = 4, height = 0.5, pos='4,",ystart+14.5,"!', tooltip = '", tooltips[4], "', style='filled']
+      ), "', width = 4, height = 0.5, pos='4,",ystart+14.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
       otherresults [label = '", paste0(text_wrap(otherresults_text, 40),
-                                    '\n(n = ',
-                                    otherresults,
-                                    ')'
+                                       '\n(n = ',
+                                       otherresults,
+                                       ')'
       ), "', width = 4, height = 0.5, pos='9,",ystart+14.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
-      prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
-                                      '\n(n = ',
-                                      prescreened,
-                                      ')'
-      ), "', width = 2.5, height = 0.5, pos='2,7!', tooltip = '", tooltips[4], "', style='filled']
+      ", prescreenednode, "
     
       node [shape = box,
             fontname = ", font, ",
@@ -177,12 +199,12 @@ ROSES_flowchart <- function (dbresults,
                                   '\n(n = ',
                                   deduped,
                                   ')'
-    ), "', width = 4, height = 0.5, pos='4,",ystart+13,"!', tooltip = '", tooltips[4], "']
+      ), "', width = 4, height = 0.5, pos='4,",ystart+13,"!', tooltip = '", tooltips[4], "']
       
       dupesremoved [label = '", paste0(text_wrap(dupesremoved_text, 40),
-                                    '\n(n = ',
-                                    dupesremoved,
-                                    ')'
+                                       '\n(n = ',
+                                       dupesremoved,
+                                       ')'
       ), "', width = 4, height = 0.5, pos='9,",ystart+13,"!', tooltip = '", tooltips[4], "']
     
       ", titleabstract, "
@@ -193,9 +215,10 @@ ROSES_flowchart <- function (dbresults,
                                  ')'
       ), "', width = 4, height = 0.5, pos='4,10!', tooltip = '", tooltips[4], "']
       
-      ftnotretr [label = '", paste0(text_wrap(ftnotretr_text, 40),
+      ftnotretr [label = '", paste0(text_wrap(ftnotretr_text, 40),  
+                                    '\n(n = ', allnoretr, ')',
                                     '\n(',
-                                    paste(paste(ftnotretr[1,], collapse = ', n ='), paste(ftnotretr[2,], collapse = ', n ='), sep = '; '),
+                                    paste(paste(ftnotretr[1,], collapse = ' = '), paste(ftnotretr[2,], collapse = ' = '), sep = '; '),
                                     ')'
       ), "', width = 4, height = 0.5, pos='9,10!', tooltip = '", tooltips[4], "']  
     
@@ -205,17 +228,17 @@ ROSES_flowchart <- function (dbresults,
                                  ')'
       ), "', width = 4, height = 0.5, pos='4,8.5!', tooltip = '", tooltips[4], "']
       
-      ftexcl [label = '", paste0(text_wrap(ftexcl_text, 40),
-                                 '\n\nExcluded on:\n',
-                                 paste(paste0(ftexcl[,1], ' (n=', ftexcl[,2], ')'), collapse = '\n')
+      ftexcl [label = '", paste0(text_wrap(ftexcl_text, 40), ' (n = ', allftexcl, ')',
+                                 '\n\nReasons:\n',
+                                 paste(paste0(ftexcl[,1], ' (n = ', ftexcl[,2], ')'), collapse = '\n')
       ), "', width = 4, height = 0.5, pos='9,", ftexclh, "!', tooltip = '", tooltips[4], "']  
     
       studart [label = '", paste0(text_wrap(studart_text, 40),
-                                 '\n(n = ',
-                                 studart[1],
-                                 ' / n = ',
-                                 studart[2],
-                                 ')'
+                                  '\n(n = ',
+                                  studart[1],
+                                  ' / n = ',
+                                  studart[2],
+                                  ')'
       ), "', width = 4, height = 0.5, pos='4,5.5!', tooltip = '", tooltips[4], "']
     
       caincl [label = '", paste0(text_wrap(caincl_text, 40),
@@ -224,10 +247,9 @@ ROSES_flowchart <- function (dbresults,
                                  ')'
       ), "', width = 4, height = 0.5, pos='4,4!', tooltip = '", tooltips[4], "']
       
-      caexcl [label = '", paste0(text_wrap(caexcl_text, 40),
-                                 '\n(n = ',
-                                 caexcl,
-                                 ')'
+      caexcl [label = '", paste0(text_wrap(caexcl_text, 40), ' (n = ', allcaexcl, ')',
+                                 '\n\nReasons:\n',
+                                 paste(paste0(caexcl[,1], ' (n = ', caexcl[,2], ')'), collapse = '\n')
       ), "', width = 4, height = 0.5, pos='9,4!', tooltip = '", tooltips[4], "']
                                 
       narrincl [label = '", paste0(text_wrap(narrincl_text, 40),
@@ -236,10 +258,9 @@ ROSES_flowchart <- function (dbresults,
                                    ')'
       ), "', width = 4, height = 0.5, pos='4,2.5!', tooltip = '", tooltips[4], "']
       
-      finalexcl [label = '", paste0(text_wrap(finalexcl_text, 40),
-                                    '\n(n = ',
-                                    finalexcl,
-                                    ')'
+      finalexcl [label = '", paste0(text_wrap(finalexcl_text, 45), ' (n = ', allfinalexcl, ')',
+                                    '\n\nReasons:\n',
+                                    paste(paste0(finalexcl[,1], ' (n = ', finalexcl[,2], ')'), collapse = '\n')
       ), "', width = 4, height = 0.5, pos='9,1!', tooltip = '", tooltips[4], "']
       
       node [shape = box,
@@ -249,7 +270,7 @@ ROSES_flowchart <- function (dbresults,
                                     '\n(n = ',
                                     finalincl,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style = 'filled']
+      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style='filled']
       
       node [shape = square, width = 0, color=White]
       A0 [label = '', width = 0, height = 0, pos='9,", ystart+13.75, "!', tooltip='']
@@ -277,7 +298,7 @@ ROSES_flowchart <- function (dbresults,
       ftretr->ftnotretr;
       ftretr->ftincl;
       ftincl->ftexcl;
-      prescreened->A2;
+      ", prescreenededge, "
       studart->caincl;
       caincl->caexcl;
       caincl->narrincl;
@@ -310,6 +331,18 @@ ROSES_flowchart <- function (dbresults,
   } else if (type == 'map') {
     
     #------------------------------------------------------------------------
+    if (include_prescreened == TRUE){
+      prescreenednode <- paste0("prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
+                                                                 '\n(n = ',
+                                                                 prescreened,
+                                                                 ')'
+      ), "', width = 2.5, height = 0.5, pos='2,4!', tooltip = '", tooltips[4], "', style='filled']")
+      prescreenededge <- 'prescreened->A2;'
+    } else {
+      prescreenednode <- ''
+      prescreenededge <- ''
+    }
+    
     if(nrow(ftexcl) > 5){
       ftexclh <- 5.5 - ((nrow(ftexcl)-5)/4)
     } else {
@@ -378,19 +411,15 @@ ROSES_flowchart <- function (dbresults,
                                     '\n(n = ',
                                     dbresults,
                                     ')'
-      ), "', width = 4, height = 0.5, pos='4,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style = 'filled']
+      ), "', width = 4, height = 0.5, pos='4,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
       otherresults [label = '", paste0(text_wrap(otherresults_text, 40),
                                        '\n(n = ',
                                        otherresults,
                                        ')'
-      ), "', width = 4, height = 0.5, pos='9,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style = 'filled']
+      ), "', width = 4, height = 0.5, pos='9,",ystart+11.5,"!', tooltip = '", tooltips[4], "', style='filled']
       
-      prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
-                                      '\n(n = ',
-                                      prescreened,
-                                      ')'
-      ), "', width = 2.5, height = 0.5, pos='2,4!', tooltip = '", tooltips[4], "', style = 'filled']
+      ", prescreenednode,"
     
       node [shape = box,
             fontname = ", font, ",
@@ -415,9 +444,10 @@ ROSES_flowchart <- function (dbresults,
                                  ')'
       ), "', width = 4, height = 0.5, pos='4,7!', tooltip = '", tooltips[4], "']
       
-      ftnotretr [label = '", paste0(text_wrap(ftnotretr_text, 40),
+      ftnotretr [label = '", paste0(text_wrap(ftnotretr_text, 40),  
+                                    '\n(n = ', allnoretr, ')',
                                     '\n(',
-                                    paste(paste(ftnotretr[1,], collapse = ', n ='), paste(ftnotretr[2,], collapse = ', n ='), sep = '; '),
+                                    paste(paste(ftnotretr[1,], collapse = ' = '), paste(ftnotretr[2,], collapse = ' = '), sep = '; '),
                                     ')'
       ), "', width = 4, height = 0.5, pos='9,7!', tooltip = '", tooltips[4], "']  
     
@@ -427,9 +457,9 @@ ROSES_flowchart <- function (dbresults,
                                  ')'
       ), "', width = 4, height = 0.5, pos='4,5.5!', tooltip = '", tooltips[4], "']
       
-      ftexcl [label = '", paste0(text_wrap(ftexcl_text, 40),
-                                 '\n\nExcluded on:\n',
-                                 paste(paste0(ftexcl[,1], ' (n=', ftexcl[,2], ')'), collapse = '\n')
+      ftexcl [label = '", paste0(text_wrap(ftexcl_text, 40), ' (n = ', allftexcl, ')',
+                                 '\n\nReasons:\n',
+                                 paste(paste0(ftexcl[,1], ' (n = ', ftexcl[,2], ')'), collapse = '\n')
       ), "', width = 4, height = 0.5, pos='9,", ftexclh, "!', tooltip = '", tooltips[4], "']  
     
       studart [label = '", paste0(text_wrap(studart_text, 40),
@@ -444,10 +474,10 @@ ROSES_flowchart <- function (dbresults,
             fontname = ", font, ",
             color = ", output_colour, "]
       finalmapincl [label = '", paste0(text_wrap(finalmapincl_text, 40),
-                                    '\n(n = ',
-                                    finalmapincl,
-                                    ')'
-      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style = 'filled']
+                                       '\n(n = ',
+                                       finalmapincl,
+                                       ')'
+      ), "', width = 4, height = 0.5, pos='4,1!', tooltip = '", tooltips[4], "', style='filled']
       
       node [shape = square, width = 0, color=White]
       A0 [label = '', width = 0, height = 0, pos='9,", ystart+10.75, "!', tooltip='']
@@ -476,7 +506,7 @@ ROSES_flowchart <- function (dbresults,
       ftretr->ftnotretr;
       ftretr->ftincl;
       ftincl->ftexcl;
-      prescreened->A2;
+      ", prescreenededge, "
       studart->finalmapincl;
       
       edge [color = ", arrow_colour, ", 
