@@ -13,6 +13,7 @@ ftnotretr <- data.frame(reason = c('Not accessible', 'Not found'), n = c('xxx', 
 ftincl <- 'xxx'
 ftexcl <- data.frame(reason = c('Population', 'Intervention', 'Comparator', 'Outcome', 'Study design'), n = c('xxx', 'xxx', 'xxx', 'xxx', 'xxx'))
 prescreened <- 'xxx'
+prescreened_text_additional <- ''
 studart <- c('xxx', 'xxx')
 caincl <- 'xxx'
 caexcl <- data.frame(reason = c('Reason1', 'Reason2', 'Reason3', 'Reason4', 'Reason5'), n = c('xxx', 'xxx', 'xxx', 'xxx', 'xxx'))
@@ -38,6 +39,7 @@ ROSES_flowchart <- function (dbresults,
                              ftincl,
                              ftexcl,
                              prescreened,
+                             prescreened_text_additional,
                              studart,
                              caincl,
                              caexcl,
@@ -106,7 +108,8 @@ ROSES_flowchart <- function (dbresults,
       prescreenednode <- paste0("prescreened [label = '", paste0(text_wrap(prescreened_text, 30),
                                                                  '\n(n = ',
                                                                  prescreened,
-                                                                 ')'
+                                                                 ')\n',
+                                                                 text_wrap(prescreened_text_additional, 35)
       ), "', width = 2.5, height = 0.5, pos='2,7!', tooltip = '", tooltips[4], "', style='filled']")
       prescreenededge <- 'prescreened->A2;'
     } else {

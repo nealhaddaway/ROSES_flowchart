@@ -89,7 +89,8 @@ ui <- shinyUI(navbarPage("ROSES Flow Chart",
                             textInput("otherresults", label = "Other sources results:", value = '')),
                 conditionalPanel(
                   condition = "input.include_prescreened_input == 'yes'",
-                  textInput("prescreened", label = "Prescreened records:", value = '')
+                  textInput("prescreened", label = "Prescreened records:", value = ''),
+                  textInput("prescreened_text", label = "Additional description of prescreened studies", value = '')
                   ),
                 h3("Deduplication"),
                 splitLayout(textInput("deduped", label = "Deduplicated records:", value = ''),
@@ -184,6 +185,7 @@ server <- function(input, output) {
                               ftincl = input$ftincl,
                               ftexcl = ftexcl,
                               prescreened = input$prescreened,
+                              prescreened_text_additional = input$prescreened_text,
                               studart = studart,
                               caincl = input$caincl,
                               caexcl = caexcl,
