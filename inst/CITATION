@@ -1,0 +1,13 @@
+citHeader("To cite ROSES_flowchart in publications, please use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "ROSES_flowchart(): An R package and ShinyApp for producing ROSES reporting standards flow charts",
+  author   = "Neal R Haddaway",
+  year     = "2020",
+  textVersion = paste(
+    "Neal R Haddaway and Luke A McGuinness (2020).",
+    "ROSES_flowchart(): An R package and ShinyApp for producing ROSES reporting standards flow charts (Version 0.0.1)",
+    "http://doi.org/10.5281/zenodo.4294810"
+  )
+)
